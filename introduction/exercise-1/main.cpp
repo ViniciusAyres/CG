@@ -5,6 +5,7 @@
 
 void init(void)
 {
+  gluOrtho2D(-WINDOW_WIDTH, WINDOW_WIDTH, -WINDOW_WIDTH, WINDOW_HEIGHT);
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -37,6 +38,7 @@ int main(int argc, char **argv)
   glutInitWindowSize(400, 400);
   glutInitWindowPosition(0, 0);
   glutCreateWindow("Exercise 1");
+  
 
   init();
 
