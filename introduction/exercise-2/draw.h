@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "math_operations.h"
 
@@ -24,23 +25,25 @@ void drawAxis(void)
   glFlush();
 }
 
-void drawSinPoints(int slices)
+void drawSinPoints(int numberOfPoints)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  Point *points = splitInterval(0, 360, slices);
-
+  Point *points = splitInterval(0, 360, numberOfPoints);
+  char windowTitle[40];
+  sprintf(windowTitle, "Exercise 2 - %d points", numberOfPoints);
+  glutSetWindowTitle(windowTitle);
   drawAxis();
 
   //Desenha reta
   glBegin(GL_LINE_STRIP);
     glColor3f(0.0, 1.0, 0.0);
     
-    for(int i = 0; i < slices; i++)
+    for(int i = 0; i < numberOfPoints; i++)
     {
       printf("[%d] x: %lf, y: %lf\n", i, points[i].x, points[i].y);
       glVertex2f(points[i].x, points[i].y);
     }
   glEnd();
-  
+
   glFlush();
 }
