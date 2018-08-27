@@ -3,13 +3,43 @@
 #define WINDOW_HEIGHT 200
 #define WINDOW_WIDTH 200
 
+typedef struct Quadrants
+{
+  int x;
+  int y;
+} Quadrant;
+
+typedef struct Colors
+{
+  double red;
+  double green;
+  double blue;
+} Color;
+
 void drawFirstQuadrant(void);
 void drawSecondQuadrant(void);
 void drawThirdQuadrant(void);
 void drawFourthQuadrant(void);
+void drawTriangle(Quadrant quadrant, Color color);
+void drawEmptyTriangle(Quadrant quadrant, Color color);
 void drawAxis(void);
 void drawBorder(void);
 
+void drawAxis(void)
+{
+  glLineWidth(1.0);
+  glBegin(GL_LINES);
+    //desenhar linha vertical vermelha
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex2f(0, -10000);
+    glVertex2f(0, 10000);
+    
+    //desenhar linha horizontal verde
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex2f(-10000, 0);
+    glVertex2f(10000, 0);
+  glEnd();
+}
 
 void drawBorder(double xMin, double xMax, double yMin, double yMax)
 {
@@ -25,12 +55,35 @@ void drawBorder(double xMin, double xMax, double yMin, double yMax)
   glFlush();
 }
 
+void drawTriangle(Quadrant quadrant, Color color)
+{
+  glBegin(GL_POLYGON);
+    glColor3f(color.red, color.green, color.blue);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 1.0);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 5.0);
+    glVertex2f(quadrant.x * 5.0, quadrant.y * 1.0);
+  glEnd();
+}
+
+void drawEmptyTriangle(Quadrant quadrant, Color color)
+{
+  glBegin(GL_LINE_LOOP);
+    glColor3f(color.red, color.green, color.blue);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 1.0);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 5.0);
+    glVertex2f(quadrant.x * 5.0, quadrant.y * 1.0);
+  glEnd();
+
+}
+
 void drawFirstQuadrant(void)
 {
   double xMin = -1.0,
     xMax = 6.0,
     yMin = -1.0,
     yMax = 6.0;
+  Quadrant quadrant = {1, 1};
+  Color color = {1.0, 1.0, 0.0};
 
   //cria o viewport no primeiro quadrante
   glMatrixMode(GL_PROJECTION);
@@ -40,43 +93,22 @@ void drawFirstQuadrant(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glViewport (200, 200, 190, 190);
+
   drawBorder(xMin, xMax, yMin, yMax);
-
-  //desenhar linha vertical vermelha
-  glLineWidth(1.0);
-  glColor3f(1.0, 0.0, 0.0);
-
-  glBegin(GL_LINES);
-    glVertex2f(0, -10);
-    glVertex2f(0, 10);
-  glEnd();
-
-  //desenha linha horizontal verde
-  glLineWidth(1.0);
-  glColor3f(0.0, 1.0, 0.0);
-
-  glBegin(GL_LINES);
-    glVertex2f(-10, 0);
-    glVertex2f(10, 0);
-  glEnd();
-
-  // //desenhar triangulo amarelo
-  glBegin(GL_POLYGON);
-    glColor3f(1.0, 1.0, 0.0);
-    glVertex2f(1.0, 1.0);
-    glVertex2f(1.0, 5.0);
-    glVertex2f(5.0, 1.0);
-  glEnd();
+  drawAxis();
+  drawTriangle(quadrant, color);
 
   glFlush();
 }
 
 void drawThirdQuadrant(void)
 {
-    double xMin = -1.0,
+  double xMin = -1.0,
     xMax = 6.0,
     yMin = -6.0,
     yMax = 1.0;
+  Quadrant quadrant = {1, -1};
+  Color color = {0.0, 1.0, 1.0};
 
   //cria o viewport no primeiro quadrante
   glMatrixMode(GL_PROJECTION);
@@ -86,33 +118,10 @@ void drawThirdQuadrant(void)
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glViewport (200, 10, 190, 185);
+
   drawBorder(xMin, xMax, yMin, yMax);
-
-  //desenhar linha vertical vermelha
-  glLineWidth(1.0);
-  glColor3f(1.0, 0.0, 0.0);
-
-  glBegin(GL_LINES);
-    glVertex2f(0, -10);
-    glVertex2f(0, 10);
-  glEnd();
-
-  //desenha linha horizontal verde
-  glLineWidth(1.0);
-  glColor3f(0.0, 1.0, 0.0);
-
-  glBegin(GL_LINES);
-    glVertex2f(-10, 0);
-    glVertex2f(10, 0);
-  glEnd();
-
-  // //desenhar triangulo amarelo
-  glBegin(GL_LINE_LOOP);
-    glColor3f(0.0, 1.0, 1.0);
-    glVertex2f(1.0, -1.0);
-    glVertex2f(1.0, -5.0);
-    glVertex2f(5.0, -1.0);
-  glEnd();
+  drawAxis();
+  drawEmptyTriangle(quadrant, color);
 
   glFlush();
 }
