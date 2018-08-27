@@ -14,6 +14,9 @@ void display(void)
   glClear(GL_COLOR_BUFFER_BIT);
   glFlush();
   drawFirstQuadrant();
+  // drawSecondQuadrant();
+  drawThirdQuadrant();
+  // drawFourthQuadrant();
 }
 
 int main(int argc, char **argv)
