@@ -12,11 +12,11 @@ void init(void)
 void display(void)
 {
   glClear(GL_COLOR_BUFFER_BIT);
-  glFlush();
   drawFirstQuadrant();
-  // drawSecondQuadrant();
+  drawSecondQuadrant();
   drawThirdQuadrant();
   drawFourthQuadrant();
+  glFlush();
 }
 
 int main(int argc, char **argv)
