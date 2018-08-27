@@ -16,7 +16,7 @@ void display(void)
   drawFirstQuadrant();
   // drawSecondQuadrant();
   drawThirdQuadrant();
-  // drawFourthQuadrant();
+  drawFourthQuadrant();
 }
 
 int main(int argc, char **argv)

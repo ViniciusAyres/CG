@@ -22,6 +22,7 @@ void drawThirdQuadrant(void);
 void drawFourthQuadrant(void);
 void drawTriangle(Quadrant quadrant, Color color);
 void drawEmptyTriangle(Quadrant quadrant, Color color);
+void drawZLine(Quadrant quadrant, Color color);
 void drawAxis(void);
 void drawBorder(void);
 
@@ -73,7 +74,17 @@ void drawEmptyTriangle(Quadrant quadrant, Color color)
     glVertex2f(quadrant.x * 1.0, quadrant.y * 5.0);
     glVertex2f(quadrant.x * 5.0, quadrant.y * 1.0);
   glEnd();
+}
 
+void drawZLine(Quadrant quadrant, Color color)
+{
+  glBegin(GL_LINE_STRIP);
+    glColor3f(color.red, color.green, color.blue);
+    glVertex2f(quadrant.x * 5.0, quadrant.y * 5.0);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 5.0);
+    glVertex2f(quadrant.x * 5.0, quadrant.y * 1.0);
+    glVertex2f(quadrant.x * 1.0, quadrant.y * 1.0);
+  glEnd();
 }
 
 void drawFirstQuadrant(void)
@@ -102,6 +113,31 @@ void drawFirstQuadrant(void)
 }
 
 void drawThirdQuadrant(void)
+{
+  double xMin = -6.0,
+    xMax = 1.0,
+    yMin = -6.0,
+    yMax = 1.0;
+  Quadrant quadrant = {-1, -1};
+  Color color = {1.0, 0.0, 1.0};
+
+  //cria o viewport no primeiro quadrante
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(xMin, xMax, yMin, yMax, -1, 1);
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glViewport (5, 10, 190, 185);
+
+  drawBorder(xMin, xMax, yMin, yMax);
+  drawAxis();
+  drawZLine(quadrant, color);
+
+  glFlush();
+}
+
+void drawFourthQuadrant(void)
 {
   double xMin = -1.0,
     xMax = 6.0,
