@@ -81,5 +81,11 @@ void keyboard(unsigned char key, int x, int y) {
     case 'a':
       X -= TRANSLATION;
       break;
+    case '+':
+      scale *= SCALATION;
+      break;
+    case '-':
+      scale /= SCALATION;
+      break;
   }
 }
