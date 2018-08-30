@@ -2,12 +2,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define TRANSLATION 2
+#define SCALATION 1.1
+#define ROTATION 5
+
 void drawAxis(void);
 void display(void);
 void init(void);
+void keyboard(unsigned char key, int x, int y);
 
 float angle = 0.0, scale = 1.0;
-float x = 0.0, y = 0.0;
+float X = 0.0, Y = 0.0;
 
 main(int argc, char **argv) {
   glutInit(&argc, argv);
@@ -27,24 +32,28 @@ void drawAxis(void) {
   glEnd();
 }
 
-void display(void)
-{
+void display(void) {
   glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
   drawAxis();
-  glutWireCube(10);
+  glPushMatrix();
+    glTranslatef(X, Y, 0.0);
+    glRotatef(angle, 0.0, 0.0, 1.0);
+    glScalef(scale, scale, scale);
+    glutWireCube(10);
+  glPopMatrix();
 
   glutSwapBuffers ();
   glutPostRedisplay();
 }
 
-void init (void)
-{
+void init (void) {
   glutInitDisplayMode (GLUT_DOUBLE|GLUT_DEPTH|GLUT_RGB);
   glutInitWindowSize (300, 300);
   glutInitWindowPosition (100, 100);
   glutCreateWindow ("hello");
+  glutKeyboardFunc(keyboard);
 
   // selecionar cor de fundo (preto)
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -56,4 +65,21 @@ void init (void)
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+}
+
+void keyboard(unsigned char key, int x, int y) {
+  switch (key) {
+    case 'w':
+      Y += TRANSLATION;
+      break;
+    case 's':
+      Y -= TRANSLATION;
+      break;
+    case 'd':
+      X += TRANSLATION;
+      break;
+    case 'a':
+      X -= TRANSLATION;
+      break;
+  }
 }
