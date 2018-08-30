@@ -87,5 +87,11 @@ void keyboard(unsigned char key, int x, int y) {
     case '-':
       scale /= SCALATION;
       break;
+    case 'r':
+      angle -= ROTATION;
+      break;
+    case 'R':
+      angle += ROTATION;
+      break;
   }
 }
