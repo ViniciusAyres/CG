@@ -6,7 +6,9 @@ float angle = 0, scale = 1.0;
 float xtrans = 0, ytrans = 0, ztrans = 0;
 int enableMenu = 0;
 float dx = xtrans,
-      dy = ytrans;
+      dy = ytrans,
+      dangle = angle,
+      dscale = scale;
 
 float desiredFPS = 60;
 int animationRunning = 0;
@@ -62,11 +64,11 @@ void showMenu() {
       break;
     case 2:
       printf("\n\nInforme o angulo de rotacao (em graus): ");
-      scanf("%f", &angle);
+      scanf("%f", &dangle);
       break;
     case 3:
       printf("\n\nInforme o fator de escala: ");
-      scanf("%f", &scale);
+      scanf("%f", &dscale);
       break;
     case 4:
       exit(1);
@@ -147,6 +149,8 @@ void idle() {
     */
   float xDirection = dx - xtrans > 0 ? 1 : -1;
   float yDirection = dy - ytrans > 0 ? 1 : -1;
+  float angleDirection = dangle - angle > 0 ? 1 : -1;
+  float scaleDirection = dscale - scale > 0 ? 1 : -1;
 
   animationRunning = 0;
   if(xtrans != dx) {
@@ -157,6 +161,16 @@ void idle() {
   if(ytrans != dy) {
     animationRunning = 1;
     ytrans += 1 * yDirection;
+  }
+
+  if(angle != dangle) {
+    animationRunning = 1;
+    angle += 5 * angleDirection;
+  }
+
+  if(scale != dscale) {
+    animationRunning = 1;
+    scale += 0.25 * scaleDirection;
   }
 
   /* Update tLast for next time, using static local variable */
