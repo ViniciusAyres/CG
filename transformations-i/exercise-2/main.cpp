@@ -1,13 +1,3 @@
-/*
-  Name:        quad_transform.cpp
-  Copyright:   Version 0.1
-  Author:      Rodrigo Luis de Souza da Silva
-  Edited:	   Bruno José Dembogurski
-  Update:      10/07/2018
-  Date:        16/09/2004
-  Description: Transformations using of OpenGL commands
-*/
-
 #include <GL/glut.h>
 #include <stdio.h>
 #include <stdlib.h>
