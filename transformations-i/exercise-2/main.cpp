@@ -5,7 +5,13 @@
 float angle = 0, scale = 1.0;
 float xtrans = 0, ytrans = 0, ztrans = 0;
 int enableMenu = 0;
+float dx = xtrans,
+      dy = ytrans;
 
+float desiredFPS = 60;
+int animationRunning = 0;
+
+void idle(void);
 void display(void);
 void init (void);
 void desenhaEixos();
@@ -19,6 +25,7 @@ int main(int argc, char** argv) {
   glutInitWindowPosition (100, 100);
   glutCreateWindow ("hello");
   glutMouseFunc( mouse );
+  glutIdleFunc( idle);
   init ();
   glutDisplayFunc(display);
   glutMainLoop();
@@ -35,7 +42,7 @@ void mouse(int button, int state, int x, int y)
 
 void showMenu() {
   int op;
-  system("clear");
+  // system("clear");
   printf("\n=== MENU ===");
   printf("\n1 - Translacao");
   printf("\n2 - Rotacao");
@@ -49,9 +56,9 @@ void showMenu() {
     case 1:
       printf("\n\nInforme o vetor de translacao (entre -100.0 e 100.0)");
       printf("\nX : ");
-      scanf("%f", &xtrans);
+      scanf("%f", &dx);
       printf("Y : ");
-      scanf("%f", &ytrans);
+      scanf("%f", &dy);
       break;
     case 2:
       printf("\n\nInforme o angulo de rotacao (em graus): ");
@@ -99,7 +106,9 @@ void display(void) {
   glutSwapBuffers ();
   glutPostRedisplay();
 
-  showMenu();
+  if(animationRunning == 0){
+    showMenu();
+  }
 }
 
 void init (void) {
@@ -113,4 +122,45 @@ void init (void) {
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+}
+
+void idle() {
+  float firstTime, desiredFrameTime, frameTime;
+  static float lastTime = 0.0;
+
+  // Get elapsed time
+  firstTime = glutGet(GLUT_ELAPSED_TIME);
+  // convert milliseconds to seconds
+  firstTime /= 1000.0;
+
+  // Calculate frame time
+  frameTime = firstTime - lastTime;
+  // Calculate desired frame time
+  desiredFrameTime = 1.0 / (float) (desiredFPS);
+
+  // Check if the desired frame time was achieved. If not, skip animationRunning.
+  if( frameTime <= desiredFrameTime)
+      return;
+
+  /*
+    *UPDATE animationRunning VARIABLES
+    */
+  float xDirection = dx - xtrans > 0 ? 1 : -1;
+  float yDirection = dy - ytrans > 0 ? 1 : -1;
+
+  animationRunning = 0;
+  if(xtrans != dx) {
+    animationRunning = 1;
+    xtrans += 1 * xDirection;
+  }
+
+  if(ytrans != dy) {
+    animationRunning = 1;
+    ytrans += 1 * yDirection;
+  }
+
+  /* Update tLast for next time, using static local variable */
+  lastTime = firstTime;
+
+  glutPostRedisplay();
 }
