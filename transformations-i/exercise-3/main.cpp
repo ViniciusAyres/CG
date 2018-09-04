@@ -13,18 +13,24 @@
 
 #define BOARD_SPACES 6
 
+void idle(void);
+void mouse(int button, int state, int x, int y);
 void display(void);
 void init(void);
-void mouse(int button, int state, int x, int y);
 
-int circleX = 25;
-int circleY = 25;
+int circleX = 25,
+    circleY = 25,
+    dx = circleX,
+    dy = circleY;
+
+float desiredFPS = 60;
 
 main(int argc, char **argv) {
   glutInit(&argc, argv);
   init();
   glutDisplayFunc(display);
   glutMouseFunc(mouse);
+  glutIdleFunc(idle);
   glutMainLoop();
   return 0;
 }
@@ -51,8 +57,8 @@ void mouse(int button, int state, int x, int y) {
   int slotY = WINDOW_Y / BOARD_SPACES;
   int slotYCenter = slotY / 2;
 
-  circleX = slotX * (x / slotX) + slotXCenter;
-  circleY = slotY * ((MAX_Y - y) / slotY) + slotYCenter;
+  dx = slotX * (x / slotX) + slotXCenter;
+  dy = slotY * ((MAX_Y - y) / slotY) + slotYCenter;
 }
 
 void display(void) {
@@ -63,5 +69,33 @@ void display(void) {
   drawCircle(circleX, circleY);
 
   glutSwapBuffers ();
+  glutPostRedisplay();
+}
+
+void idle() {
+  float firstTime, desiredFrameTime, frameTime;
+  static float lastTime = 0.0;
+
+  firstTime = glutGet(GLUT_ELAPSED_TIME);
+  firstTime /= 1000.0;
+  frameTime = firstTime - lastTime;
+  desiredFrameTime = 1.0 / (float) (desiredFPS);
+  if( frameTime <= desiredFrameTime)
+      return;
+
+  lastTime = firstTime;
+
+
+  float xDirection = dx - circleX > 0 ? 1 : -1;
+  float yDirection = dy - circleY > 0 ? 1 : -1;
+
+  if(circleX != dx) {
+    circleX += 5 * xDirection;
+  }
+
+  if(circleY != dy) {
+    circleY += 5 * yDirection;
+  }
+
   glutPostRedisplay();
 }
