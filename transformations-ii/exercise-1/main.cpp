@@ -10,7 +10,7 @@ int selected = 1;
 
 void init(void) {
 	printf("Pressione as setas direita e esquerda para mover o braco.\n");
-	printf("Selecione as teclas 1 e 2 para escolher o segmento a ser movido.\n");
+	printf("Selecione as teclas 1, 2 e 3 para escolher o segmento a ser movido.\n");
 	printf("Pressione ESC para sair.\n");
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -96,6 +96,9 @@ void keyboard (unsigned char key, int x, int y) {
     case '2':
       selected = 2;
       break;
+    case '3':
+      selected = 3;
+      break;
     case 27:
       exit(0);
       break;
@@ -108,13 +111,15 @@ void keyboard (unsigned char key, int x, int y) {
 void specialKeys(int key, int x, int y) {
   switch(key) {
     case GLUT_KEY_LEFT:
-    if(selected == 1) shoulder = ((int) shoulder + 5) % 360;
-    if(selected == 2) elbow = ((int) elbow + 5) % 360;
-    break;
+      if(selected == 1) shoulder = ((int) shoulder + 5) % 360;
+      if(selected == 2) elbow = ((int) elbow + 5) % 360;
+      if(selected == 3) wrist = ((int) wrist + 5) % 360;
+      break;
     case GLUT_KEY_RIGHT:
-    if(selected == 1) shoulder = ((int) shoulder - 5) % 360;
-    if(selected == 2) elbow = ((int) elbow - 5) % 360;
-    break;
+      if(selected == 1) shoulder = ((int) shoulder - 5) % 360;
+      if(selected == 2) elbow = ((int) elbow - 5) % 360;
+      if(selected == 3) wrist = ((int) wrist - 5) % 360;
+      break;
   }
   glutPostRedisplay();
 }
