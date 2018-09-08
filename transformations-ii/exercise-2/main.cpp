@@ -25,7 +25,7 @@ void drawClaw(void) {
     glPopMatrix();
     
     glTranslatef(0.5, 0.0, 0.0); //Coloca o centro no final da garra;
-    glRotatef(-angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glRotatef(-angle, 0.0, 0.0, 1.0); //Gira pra dar um efeito
     glTranslatef(0.5, 0.0, 0.0); //Se afasta do centro
     glPushMatrix();
       glScalef(1.0, 0.25, 0.25);
@@ -42,9 +42,9 @@ void drawClaw(void) {
       glScalef(1.0, 0.25, 0.25);
       glutSolidCube(1.0);
     glPopMatrix();
-    
+
     glTranslatef(0.5, 0.0, 0.0); //Coloca o centro no final da garra;
-    glRotatef(angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glRotatef(angle, 0.0, 0.0, 1.0); //Gira pra dar um efeito
     glTranslatef(0.5, 0.0, 0.0); //Se afasta do centro
     glPushMatrix();
       glScalef(1.0, 0.25, 0.25);
@@ -56,7 +56,7 @@ void drawClaw(void) {
 
 void init(void) {
 	printf("Pressione as setas direita e esquerda para mover o braco.\n");
-	printf("Selecione as teclas 1, 2 e 3 para escolher o segmento a ser movido.\n");
+	printf("Selecione as teclas 1, 2, 3 ou 4 para escolher o segmento a ser movido.\n");
 	printf("Pressione ESC para sair.\n");
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
@@ -147,6 +147,9 @@ void keyboard (unsigned char key, int x, int y) {
     case '3':
       selected = 3;
       break;
+    case '4':
+      selected = 4;
+      break;
     case 27:
       exit(0);
       break;
@@ -162,11 +165,13 @@ void specialKeys(int key, int x, int y) {
       if(selected == 1) shoulder = ((int) shoulder + 5) % 360;
       if(selected == 2) elbow = ((int) elbow + 5) % 360;
       if(selected == 3) wrist = ((int) wrist + 5) % 360;
+      if(selected == 4) claw = ((int) claw + 5) % 360;
       break;
     case GLUT_KEY_RIGHT:
       if(selected == 1) shoulder = ((int) shoulder - 5) % 360;
       if(selected == 2) elbow = ((int) elbow - 5) % 360;
       if(selected == 3) wrist = ((int) wrist - 5) % 360;
+      if(selected == 4) claw = ((int) claw - 5) % 360;
       break;
   }
   glutPostRedisplay();
