@@ -4,9 +4,55 @@
 
 float shoulder = 0.0f,
       elbow = 0.0f,
-      wrist = 0.f;
+      wrist = 0.0f,
+      claw = 0.0f;
 
 int selected = 1;
+
+void drawClaw(void);
+
+void drawClaw(void) {
+  float angle = 45.0f;
+  glColor3f(1.0f, 0.0f, 0.0f);
+
+  glTranslatef(1.0, 0.0, 0.0);  //Coloca o centro no final do braço
+  glPushMatrix();
+    glRotatef(angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glTranslatef(0.5, 0.0, 0.0);
+    glPushMatrix();
+      glScalef(1.0, 0.25, 0.25);
+      glutSolidCube(1.0);
+    glPopMatrix();
+    
+    glTranslatef(0.5, 0.0, 0.0); //Coloca o centro no final da garra;
+    glRotatef(-angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glTranslatef(0.5, 0.0, 0.0); //Se afasta do centro
+    glPushMatrix();
+      glScalef(1.0, 0.25, 0.25);
+      glutSolidCube(1.0);
+    glPopMatrix();
+
+  glPopMatrix();
+
+  glPushMatrix();
+
+    glRotatef(-angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glTranslatef(0.5, 0.0, 0.0);
+    glPushMatrix();
+      glScalef(1.0, 0.25, 0.25);
+      glutSolidCube(1.0);
+    glPopMatrix();
+    
+    glTranslatef(0.5, 0.0, 0.0); //Coloca o centro no final da garra;
+    glRotatef(angle + claw, 0.0, 0.0, 1.0); //Gira pra dar um efeito
+    glTranslatef(0.5, 0.0, 0.0); //Se afasta do centro
+    glPushMatrix();
+      glScalef(1.0, 0.25, 0.25);
+      glutSolidCube(1.0);
+    glPopMatrix();
+
+  glPopMatrix();
+}
 
 void init(void) {
 	printf("Pressione as setas direita e esquerda para mover o braco.\n");
@@ -56,21 +102,23 @@ void display(void) {
 			glutSolidCube (1.0);
 		glPopMatrix();
 
-		glTranslatef(1.0, 0.0, 0.0); // origem posicionada no cotovelo
-		glRotatef(elbow, 0.0, 0.0, 1.0); // faz rotação em relação ao cotovelo
-		glTranslatef(1.0, 0.0, 0.0); // posiciona antebra�o de tamanho 2 na posiçãoo correta
+		glTranslatef(1.0, 0.0, 0.0);
+		glRotatef(elbow, 0.0, 0.0, 1.0);
+		glTranslatef(1.0, 0.0, 0.0);
 		glPushMatrix();
 			glScalef(2.0, 0.5, 0.5);
 			glutSolidCube(1.0);
 		glPopMatrix();
 
-    glTranslatef (1.0, 0.0, 0.0); // origem posicionada no cotovelo
-		glRotatef(wrist, 0.0, 0.0, 1.0); // faz rotação em relação ao cotovelo
-		glTranslatef(1.0, 0.0, 0.0); // posiciona antebra�o de tamanho 2 na posiçãoo correta
+    glTranslatef (1.0, 0.0, 0.0);
+		glRotatef(wrist, 0.0, 0.0, 1.0);
+		glTranslatef(1.0, 0.0, 0.0);
 		glPushMatrix();
 			glScalef(2.0, 0.5, 0.5);
 			glutSolidCube(1.0);
 		glPopMatrix();
+
+    drawClaw();
 
   glPopMatrix(); // origem volta para o sistema de coordenadas original
   glutSwapBuffers();
