@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-float shoulder = 0.0f, elbow = 0.0f;
+float shoulder = 0.0f,
+      elbow = 0.0f,
+      wrist = 0.f;
 
 int selected = 1;
 
@@ -54,9 +56,17 @@ void display(void) {
 			glutSolidCube (1.0);
 		glPopMatrix();
 
-		glTranslatef (1.0, 0.0, 0.0); // origem posicionada no cotovelo
-		glRotatef(elbow, 0.0, 0.0, 1.0); // faz rota��o em rela��o ao cotovelo
-		glTranslatef(1.0, 0.0, 0.0); // posiciona antebra�o de tamanho 2 na posi��o correta
+		glTranslatef(1.0, 0.0, 0.0); // origem posicionada no cotovelo
+		glRotatef(elbow, 0.0, 0.0, 1.0); // faz rotação em relação ao cotovelo
+		glTranslatef(1.0, 0.0, 0.0); // posiciona antebra�o de tamanho 2 na posiçãoo correta
+		glPushMatrix();
+			glScalef(2.0, 0.5, 0.5);
+			glutSolidCube(1.0);
+		glPopMatrix();
+
+    glTranslatef (1.0, 0.0, 0.0); // origem posicionada no cotovelo
+		glRotatef(wrist, 0.0, 0.0, 1.0); // faz rotação em relação ao cotovelo
+		glTranslatef(1.0, 0.0, 0.0); // posiciona antebra�o de tamanho 2 na posiçãoo correta
 		glPushMatrix();
 			glScalef(2.0, 0.5, 0.5);
 			glutSolidCube(1.0);
