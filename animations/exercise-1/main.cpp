@@ -5,7 +5,7 @@
 #define MAX 100.0f
 #define X_COLISION 1
 #define Y_COLISION 2
-#define N_TRIANGLES 1
+#define N_TRIANGLES 2
 
 float xSpeed = 0.5f;
 float ySpeed = 0.5f;
@@ -18,19 +18,24 @@ typedef struct POINTS {
   float y;
 } point;
 
+typedef struct Colors {
+  float red, green, blue;
+} Colors;
+
 typedef struct TriangleObject {
   point points[3];
 
   double xSpeed, ySpeed;
 } TriangleObject;
 
-TriangleObject triangles[1];
+TriangleObject triangles[N_TRIANGLES];
 
 int colision(TriangleObject triangleObject);
 void idle(void);
 void display(void);
 void init(void);
 void initializeTriangles(void);
+void drawTriangle(point points[3], Colors colors);
 TriangleObject updatePosition(TriangleObject triangleObject);
 
 int colision(TriangleObject triangleObject) {
@@ -62,27 +67,36 @@ void display(void) {
   glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
-  int crashed = colision(triangles[0]);
-  if(crashed == X_COLISION) {
-    triangles[0].xSpeed = -0.5f;
-  } else if(crashed == -X_COLISION) {
-    triangles[0].xSpeed = 0.5f;
-  } else if(crashed == Y_COLISION) {
-    triangles[0].ySpeed = -0.5f;
-  } else if(crashed == -Y_COLISION) {
-    triangles[0].ySpeed = 0.5f;
+  for(int i = 0; i < N_TRIANGLES; i++) {
+    int crashed = colision(triangles[i]);
+    if(crashed == X_COLISION) {
+      triangles[i].xSpeed = -0.5f;
+    } else if(crashed == -X_COLISION) {
+      triangles[i].xSpeed = 0.5f;
+    } else if(crashed == Y_COLISION) {
+      triangles[i].ySpeed = -0.5f;
+    } else if(crashed == -Y_COLISION) {
+      triangles[i].ySpeed = 0.5f;
+    }
   }
 
-  //TODO:Desenha triangulo()
-  glBegin(GL_LINE_LOOP);
-    glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(triangles[0].points[0].x, triangles[0].points[0].y, 0);
-    glVertex3f(triangles[0].points[1].x, triangles[0].points[1].y, 0);
-    glVertex3f(triangles[0].points[2].x, triangles[0].points[2].y, 0);
-  glEnd();
+  Colors colors = { 0.0f, 1.0f, 0.0f };
+  drawTriangle(triangles[0].points, colors);
+
+  colors = { 1.0f, 0.0f, 0.0f };
+  drawTriangle(triangles[1].points, colors);
 
   glutSwapBuffers ();
   glutPostRedisplay();
+}
+
+void drawTriangle(point points[3], Colors colors) {
+  glBegin(GL_LINE_LOOP);
+    glColor3f(colors.red, colors.green, colors.blue);
+    glVertex3f(points[0].x, points[0].y, 0);
+    glVertex3f(points[1].x, points[1].y, 0);
+    glVertex3f(points[2].x, points[2].y, 0);
+  glEnd();
 }
 
 void init (void) {
@@ -108,6 +122,16 @@ void initializeTriangles() {
       { 10.0f, 10.0f },
       { 30.0f, 50.0f },
       { 45.0f, 20.0f }
+    },
+    .xSpeed = 0.5f,
+    .ySpeed = 0.5f
+  };
+
+  triangles[1] = {
+    .points = {
+      { 40.0f, 40.0f },
+      { 85.0f, 45.0f },
+      { 60.0f, 75.0f }
     },
     .xSpeed = 0.5f,
     .ySpeed = 0.5f
@@ -143,7 +167,9 @@ void idle() {
       return;
 
   //updatePosition
-  triangles[0] = updatePosition(triangles[0]);
+  for(int i = 0; i < N_TRIANGLES; i++) {
+    triangles[i] = updatePosition(triangles[i]);
+  }
 
   /* Update tLast for next time, using static local variable */
   lastTime = firstTime;
