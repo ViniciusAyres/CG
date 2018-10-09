@@ -5,6 +5,7 @@
 #define MAX 100.0f
 #define X_COLISION 1
 #define Y_COLISION 2
+#define N_TRIANGLES 1
 
 float xSpeed = 0.5f;
 float ySpeed = 0.5f;
@@ -17,20 +18,30 @@ typedef struct POINTS {
   float y;
 } point;
 
-int colision(point triangle[3]);
+typedef struct TriangleObject {
+  point points[3];
+
+  double xSpeed, ySpeed;
+} TriangleObject;
+
+TriangleObject triangles[1];
+
+int colision(TriangleObject triangleObject);
 void idle(void);
 void display(void);
 void init(void);
+void initializeTriangles(void);
+TriangleObject updatePosition(TriangleObject triangleObject);
 
-int colision(point triangle[3]) {
+int colision(TriangleObject triangleObject) {
   for(int i = 0; i < 3; i++) {
-    if(triangle[i].x >= MAX && xSpeed > 0) {
+    if(triangleObject.points[i].x >= MAX && triangleObject.xSpeed > 0) {
       return X_COLISION;
-    } else if(triangle[i].x <= 0.0f && xSpeed < 0) {
+    } else if(triangleObject.points[i].x <= 0.0f && triangleObject.xSpeed < 0) {
       return -X_COLISION;
-    } else if(triangle[i].y >= MAX && ySpeed > 0) {
+    } else if(triangleObject.points[i].y >= MAX && triangleObject.ySpeed > 0) {
       return Y_COLISION;
-    } else if( triangle[i].y <= 0.0f && ySpeed < 0) {
+    } else if(triangleObject.points[i].y <= 0.0f && triangleObject.ySpeed < 0) {
       return -Y_COLISION;
     }
   }
@@ -40,6 +51,7 @@ int colision(point triangle[3]) {
 int main(int argc, char **argv) {
   glutInit(&argc, argv);
   init();
+  initializeTriangles();
   glutDisplayFunc(display);
   glutIdleFunc(idle);
   glutMainLoop();
@@ -50,26 +62,23 @@ void display(void) {
   glClear (GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
 
-  point triangle[3] = { {10.0f + xPosition, 10.0f + yPosition},
-                        {30.0f + xPosition, 50.0f + yPosition},
-                        {45.0f + xPosition, 20.0f + yPosition} };
-
-  int crashed = colision(triangle);
+  int crashed = colision(triangles[0]);
   if(crashed == X_COLISION) {
-    xSpeed = -0.5f;
+    triangles[0].xSpeed = -0.5f;
   } else if(crashed == -X_COLISION) {
-    xSpeed = 0.5f;
+    triangles[0].xSpeed = 0.5f;
   } else if(crashed == Y_COLISION) {
-    ySpeed = -0.5f;
+    triangles[0].ySpeed = -0.5f;
   } else if(crashed == -Y_COLISION) {
-    ySpeed = 0.5f;
+    triangles[0].ySpeed = 0.5f;
   }
 
+  //TODO:Desenha triangulo()
   glBegin(GL_LINE_LOOP);
     glColor3f(0.0f, 1.0f, 0.0f);
-    glVertex3f(triangle[0].x, triangle[0].y, 0);
-    glVertex3f(triangle[1].x, triangle[1].y, 0);
-    glVertex3f(triangle[2].x, triangle[2].y, 0);
+    glVertex3f(triangles[0].points[0].x, triangles[0].points[0].y, 0);
+    glVertex3f(triangles[0].points[1].x, triangles[0].points[1].y, 0);
+    glVertex3f(triangles[0].points[2].x, triangles[0].points[2].y, 0);
   glEnd();
 
   glutSwapBuffers ();
@@ -93,6 +102,28 @@ void init (void) {
   glLoadIdentity();
 }
 
+void initializeTriangles() {
+  triangles[0] = {
+    .points = {
+      { 10.0f, 10.0f },
+      { 30.0f, 50.0f },
+      { 45.0f, 20.0f }
+    },
+    .xSpeed = 0.5f,
+    .ySpeed = 0.5f
+  };
+}
+
+TriangleObject updatePosition(TriangleObject triangleObject) {
+  TriangleObject modifiedTriangle = triangleObject;
+
+  for(int i = 0; i < 3; i++) {
+    modifiedTriangle.points[i].x += modifiedTriangle.xSpeed;
+    modifiedTriangle.points[i].y += modifiedTriangle.ySpeed;
+  }
+
+  return modifiedTriangle;
+}
 void idle() {
   float firstTime, desiredFrameTime, frameTime;
   static float lastTime = 0.0;
@@ -111,8 +142,8 @@ void idle() {
   if( frameTime <= desiredFrameTime)
       return;
 
-  xPosition += xSpeed;
-  yPosition += ySpeed;
+  //updatePosition
+  triangles[0] = updatePosition(triangles[0]);
 
   /* Update tLast for next time, using static local variable */
   lastTime = firstTime;
