@@ -65,17 +65,16 @@ void display(void) {
 
   drawGrid(-30, squareSide, 30, 6, squareSide, 66);
 
-  drawCube(18, 6);
+  drawCube(0, 36);
 
   glutSwapBuffers();
 }
 
 void drawCube(float x, float z) {
-  float side = squareSide/2;
 
   glPushMatrix();
     glColor3f(1.0, 0.0, 0.0);
-    glTranslatef(x + side, 0 + side, z  + side);
+    glTranslatef(x , squareSide/2, z);
     glutSolidCube(squareSide);
   glPopMatrix();
 }
