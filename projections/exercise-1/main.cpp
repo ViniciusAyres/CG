@@ -5,7 +5,7 @@
 
 float rotationX = 25.0, rotationY = 0.0;
 int last_x, last_y;
-int width = 640, height = 480;
+int width = 1000, height = 480;
 
 int distOrigem = 45;
 
@@ -15,7 +15,7 @@ void idle(void);
 void keyboard (unsigned char key, int x, int y);
 void motion(int x, int y );
 void mouse(int button, int state, int x, int y);
-void drawGrid(void);
+void drawGrid(float xMin, float xStep, float xMax, float zMin, float zStep, float zMax);
 void reshape(int w, int h);
 
 int main(int argc, char** argv) {
@@ -46,6 +46,8 @@ void init(void) {
   glEnable(GL_LIGHTING);                 // Habilita luz
   glEnable(GL_DEPTH_TEST);               // Habilita Z-buffer
   glEnable(GL_CULL_FACE);                // Habilita Backface-Culling
+
+  glutSetWindowTitle("3D Board");
 }
 
 void display(void) {
@@ -53,20 +55,36 @@ void display(void) {
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(60.0, (GLfloat) width/(GLfloat) height, 1.0, 200.0);
+  gluPerspective(80.0, (GLfloat) width/(GLfloat) height, 1.0, 200.0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity ();
-  gluLookAt (0.0, 0.0, distOrigem, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  gluLookAt (0.0, 25.0, 0, 0.0, 0.0, 25.0, 0.0, 1.0, 0.0);
+
+  drawGrid(-30, 12, 30, 6, 12, 66);
 
   glPushMatrix();
-		glRotatef( rotationY, 0.0, 1.0, 0.0 );
-		glRotatef( rotationX, 1.0, 0.0, 0.0 );
-      glColor3f (1.0, 0.0, 0.0);
-      glutSolidCube(15);
+    glutSolidCube(0);
   glPopMatrix();
 
   glutSwapBuffers();
+}
+
+void drawGrid(float xMin, float xStep, float xMax, float zMin, float zStep, float zMax) {
+
+  glPushMatrix();
+    glColor3f (1.0, 1.0, 1.0);
+    for(float i = xMin; i < xMax; i = i + xStep) {
+      for(float j = zMin; j < zMax; j = j + zStep) {
+        glBegin(GL_LINE_LOOP);
+          glVertex3f(i, 0, j);
+          glVertex3f(i + xStep, 0, j);
+          glVertex3f(i + xStep, 0, j + zStep);
+          glVertex3f(i, 0, j + zStep);
+        glEnd();
+      }
+    }
+  glPopMatrix();
 }
 
 void idle () {
