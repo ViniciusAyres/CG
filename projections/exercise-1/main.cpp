@@ -6,7 +6,7 @@
 int squareSide = 12;
 float rotationX = 25.0, rotationY = 0.0;
 int last_x, last_y;
-int width = 1000, height = 480;
+int width = 1200, height = 480;
 
 int distOrigem = 45;
 
@@ -57,11 +57,11 @@ void display(void) {
 
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
-  gluPerspective(80.0, (GLfloat) width/(GLfloat) height, 1.0, 200.0);
+  gluPerspective(70.0, (GLfloat) width/(GLfloat) height, 1.0, 200.0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity ();
-  gluLookAt (0.0, 25.0, 0, 0.0, 0.0, 25.0, 0.0, 1.0, 0.0);
+  gluLookAt (0.0, 30.0, 0, 0.0, 0.0, 25.0, 0.0, 1.0, 0.0);
 
   drawGrid(-30, squareSide, 30, 6, squareSide, 66);
 
