@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
+int squareSide = 12;
 float rotationX = 25.0, rotationY = 0.0;
 int last_x, last_y;
 int width = 1000, height = 480;
@@ -16,6 +17,7 @@ void keyboard (unsigned char key, int x, int y);
 void motion(int x, int y );
 void mouse(int button, int state, int x, int y);
 void drawGrid(float xMin, float xStep, float xMax, float zMin, float zStep, float zMax);
+void drawCube(float x, float z);
 void reshape(int w, int h);
 
 int main(int argc, char** argv) {
@@ -61,13 +63,21 @@ void display(void) {
   glLoadIdentity ();
   gluLookAt (0.0, 25.0, 0, 0.0, 0.0, 25.0, 0.0, 1.0, 0.0);
 
-  drawGrid(-30, 12, 30, 6, 12, 66);
+  drawGrid(-30, squareSide, 30, 6, squareSide, 66);
 
-  glPushMatrix();
-    glutSolidCube(0);
-  glPopMatrix();
+  drawCube(18, 6);
 
   glutSwapBuffers();
+}
+
+void drawCube(float x, float z) {
+  float side = squareSide/2;
+
+  glPushMatrix();
+    glColor3f(1.0, 0.0, 0.0);
+    glTranslatef(x + side, 0 + side, z  + side);
+    glutSolidCube(squareSide);
+  glPopMatrix();
 }
 
 void drawGrid(float xMin, float xStep, float xMax, float zMin, float zStep, float zMax) {
