@@ -4,6 +4,12 @@
 #include <ctype.h>
 
 int squareSide = 12;
+float xMin = -24, 
+      xMax = 24,
+      zMin = 12,
+      zMax = 60;
+float X = xMin;
+float Z = zMin;
 float rotationX = 25.0, rotationY = 0.0;
 int last_x, last_y;
 int width = 1200, height = 480;
@@ -65,7 +71,7 @@ void display(void) {
 
   drawGrid(-30, squareSide, 30, 6, squareSide, 66);
 
-  drawCube(0, 36);
+  drawCube(X, Z);
 
   glutSwapBuffers();
 }
@@ -119,6 +125,18 @@ void keyboard (unsigned char key, int x, int y) {
     break;
     case 27:
       exit(0);
+    break;
+    case 'w':
+      Z = Z + squareSide > zMax ? zMax : Z + squareSide;
+    break;
+    case 's':
+      Z = Z - squareSide < zMin ? zMin : Z - squareSide;
+    break;
+    case 'a':
+      X = X + squareSide > xMax ? xMax : X + squareSide;;
+    break;
+    case 'd':
+      X = X - squareSide < xMin ? xMin : X - squareSide;
     break;
   }
 }
